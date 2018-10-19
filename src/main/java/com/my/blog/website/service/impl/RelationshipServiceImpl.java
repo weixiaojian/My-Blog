@@ -1,5 +1,6 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.my.blog.website.model.Vo.RelationshipVoExample;
 import com.my.blog.website.model.Vo.RelationshipVoKey;
 import com.my.blog.website.service.IRelationshipService;
@@ -15,7 +16,7 @@ import java.util.List;
  * Created by BlueT on 2017/3/18.
  */
 @Service
-public class RelationshipServiceImpl implements IRelationshipService {
+public class RelationshipServiceImpl extends ServiceImpl<RelationshipVoMapper, RelationshipVoKey> implements IRelationshipService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RelationshipServiceImpl.class);
 
     @Resource

@@ -1,5 +1,6 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.my.blog.website.dao.UserVoMapper;
 import com.my.blog.website.exception.TipException;
 import com.my.blog.website.model.Vo.UserVo;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by BlueT on 2017/3/3.
  */
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl extends ServiceImpl<UserVoMapper, UserVo> implements IUserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Resource

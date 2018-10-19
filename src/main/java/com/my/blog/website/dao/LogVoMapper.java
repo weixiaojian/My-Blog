@@ -1,5 +1,6 @@
 package com.my.blog.website.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.my.blog.website.model.Vo.LogVo;
 import com.my.blog.website.model.Vo.LogVoExample;
 import java.util.List;
@@ -7,14 +8,12 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface LogVoMapper {
+public interface LogVoMapper extends BaseMapper<LogVo> {
     long countByExample(LogVoExample example);
 
     int deleteByExample(LogVoExample example);
 
     int deleteByPrimaryKey(Integer id);
-
-    int insert(LogVo record);
 
     int insertSelective(LogVo record);
 

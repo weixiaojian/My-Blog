@@ -1,5 +1,6 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.my.blog.website.dao.AttachVoMapper;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by wangq on 2017/3/20.
  */
 @Service
-public class AttachServiceImpl implements IAttachService {
+public class AttachServiceImpl extends ServiceImpl<AttachVoMapper, AttachVo> implements IAttachService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AttachServiceImpl.class);
 
     @Resource

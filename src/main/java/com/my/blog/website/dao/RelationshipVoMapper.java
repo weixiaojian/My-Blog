@@ -1,5 +1,6 @@
 package com.my.blog.website.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.my.blog.website.model.Vo.RelationshipVoExample;
 import com.my.blog.website.model.Vo.RelationshipVoKey;
 
@@ -8,14 +9,12 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface RelationshipVoMapper {
+public interface RelationshipVoMapper extends BaseMapper<RelationshipVoKey>{
     long countByExample(RelationshipVoExample example);
 
     int deleteByExample(RelationshipVoExample example);
 
     int deleteByPrimaryKey(RelationshipVoKey key);
-
-    int insert(RelationshipVoKey record);
 
     int insertSelective(RelationshipVoKey record);
 

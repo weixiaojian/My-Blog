@@ -1,5 +1,6 @@
 package com.my.blog.website.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.my.blog.website.model.Vo.OptionVo;
 import com.my.blog.website.model.Vo.OptionVoExample;
 
@@ -9,14 +10,12 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface OptionVoMapper {
+public interface OptionVoMapper extends BaseMapper<OptionVo> {
     long countByExample(OptionVoExample example);
 
     int deleteByExample(OptionVoExample example);
 
     int deleteByPrimaryKey(String name);
-
-    int insert(OptionVo record);
 
     int insertSelective(OptionVo record);
 

@@ -1,22 +1,21 @@
 package com.my.blog.website.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.my.blog.website.model.Bo.ArchiveBo;
 import com.my.blog.website.model.Vo.ContentVo;
 import com.my.blog.website.model.Vo.ContentVoExample;
-
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
-public interface ContentVoMapper {
+public interface ContentVoMapper extends BaseMapper<ContentVo> {
     long countByExample(ContentVoExample example);
 
     int deleteByExample(ContentVoExample example);
 
     int deleteByPrimaryKey(Integer cid);
-
-    int insert(ContentVo record);
 
     int insertSelective(ContentVo record);
 

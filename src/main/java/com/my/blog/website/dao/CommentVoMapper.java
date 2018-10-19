@@ -1,5 +1,6 @@
 package com.my.blog.website.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.my.blog.website.model.Vo.CommentVo;
 import com.my.blog.website.model.Vo.CommentVoExample;
 
@@ -8,14 +9,12 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface CommentVoMapper {
+public interface CommentVoMapper extends BaseMapper<CommentVo> {
     long countByExample(CommentVoExample example);
 
     int deleteByExample(CommentVoExample example);
 
     int deleteByPrimaryKey(Integer coid);
-
-    int insert(CommentVo record);
 
     int insertSelective(CommentVo record);
 

@@ -1,5 +1,6 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.dto.MetaDto;
 import com.my.blog.website.dto.Types;
@@ -27,7 +28,7 @@ import java.util.Map;
  * Created by BlueT on 2017/3/17.
  */
 @Service
-public class MetaServiceImpl implements IMetaService {
+public class MetaServiceImpl extends ServiceImpl<MetaVoMapper, MetaVo> implements IMetaService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaServiceImpl.class);
 
     @Resource

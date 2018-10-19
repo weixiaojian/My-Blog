@@ -1,13 +1,14 @@
 package com.my.blog.website.service;
 
+import com.baomidou.mybatisplus.service.IService;
 import com.github.pagehelper.PageInfo;
-import com.my.blog.website.model.Vo.ContentVoExample;
 import com.my.blog.website.model.Vo.ContentVo;
+import com.my.blog.website.model.Vo.ContentVoExample;
 
 /**
  * Created by Administrator on 2017/3/13 013.
  */
-public interface IContentService {
+public interface IContentService extends IService<ContentVo>{
 
 //    /**
 //     * 保存文章

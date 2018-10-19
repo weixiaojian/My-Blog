@@ -1,5 +1,6 @@
 package com.my.blog.website.service;
 
+import com.baomidou.mybatisplus.service.IService;
 import com.my.blog.website.model.Vo.RelationshipVoKey;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * Created by BlueT on 2017/3/18.
  */
-public interface IRelationshipService {
+public interface IRelationshipService extends IService<RelationshipVoKey> {
     /**
      * 按住键删除
      * @param cid

@@ -1,5 +1,6 @@
 package com.my.blog.website.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.my.blog.website.dto.MetaDto;
 import com.my.blog.website.model.Vo.MetaVo;
 import com.my.blog.website.model.Vo.MetaVoExample;
@@ -11,14 +12,12 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface MetaVoMapper {
+public interface MetaVoMapper extends BaseMapper<MetaVo> {
     long countByExample(MetaVoExample example);
 
     int deleteByExample(MetaVoExample example);
 
     int deleteByPrimaryKey(Integer mid);
-
-    int insert(MetaVo record);
 
     int insertSelective(MetaVo record);
 

@@ -1,5 +1,6 @@
 package com.my.blog.website.service;
 
+import com.baomidou.mybatisplus.service.IService;
 import com.my.blog.website.model.Vo.LogVo;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * Created by BlueT on 2017/3/4.
  */
-public interface ILogService {
+public interface ILogService extends IService<LogVo> {
 
     /**
      * 保存操作日志

@@ -1,5 +1,6 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.my.blog.website.dao.LogVoMapper;
 import com.my.blog.website.service.ILogService;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by BlueT on 2017/3/4.
  */
 @Service
-public class LogServiceImpl implements ILogService {
+public class LogServiceImpl extends ServiceImpl<LogVoMapper, LogVo> implements ILogService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LogServiceImpl.class);
 

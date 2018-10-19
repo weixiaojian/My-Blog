@@ -1,5 +1,6 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.my.blog.website.dao.OptionVoMapper;
 import com.my.blog.website.model.Vo.OptionVo;
 import com.my.blog.website.model.Vo.OptionVoExample;
@@ -18,7 +19,7 @@ import java.util.Map;
  * Created by BlueT on 2017/3/7.
  */
 @Service
-public class OptionServiceImpl implements IOptionService {
+public class OptionServiceImpl extends ServiceImpl<OptionVoMapper, OptionVo> implements IOptionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OptionServiceImpl.class);
 

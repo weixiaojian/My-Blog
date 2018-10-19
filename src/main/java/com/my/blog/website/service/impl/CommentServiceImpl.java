@@ -1,5 +1,6 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.my.blog.website.constant.WebConst;
@@ -27,7 +28,7 @@ import java.util.List;
  * Created by BlueT on 2017/3/16.
  */
 @Service
-public class CommentServiceImpl implements ICommentService {
+public class CommentServiceImpl extends ServiceImpl<CommentVoMapper, CommentVo> implements ICommentService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     @Resource
@@ -64,7 +65,7 @@ public class CommentServiceImpl implements ICommentService {
         comments.setOwnerId(contents.getAuthorId());
         comments.setStatus("not_audit");
         comments.setCreated(DateKit.getCurrentUnixTime());
-        commentDao.insertSelective(comments);
+        commentDao.insert(comments);
 
         ContentVo temp = new ContentVo();
         temp.setCid(contents.getCid());

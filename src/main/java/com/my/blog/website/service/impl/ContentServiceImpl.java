@@ -1,5 +1,6 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.my.blog.website.constant.WebConst;
@@ -29,7 +30,7 @@ import java.util.List;
  * Created by Administrator on 2017/3/13 013.
  */
 @Service
-public class ContentServiceImpl implements IContentService {
+public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> implements IContentService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContentServiceImpl.class);
 
     @Resource
@@ -114,7 +115,7 @@ public class ContentServiceImpl implements IContentService {
     public ContentVo getContents(String id) {
         if (StringUtils.isNotBlank(id)) {
             if (Tools.isNumber(id)) {
-                ContentVo contentVo = contentDao.selectByPrimaryKey(Integer.valueOf(id));
+                ContentVo contentVo = contentDao.selectById(Integer.valueOf(id));
                 return contentVo;
             } else {
                 ContentVoExample contentVoExample = new ContentVoExample();

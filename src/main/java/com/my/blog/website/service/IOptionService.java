@@ -1,5 +1,6 @@
 package com.my.blog.website.service;
 
+import com.baomidou.mybatisplus.service.IService;
 import com.my.blog.website.model.Vo.OptionVo;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Map;
  * options的接口
  * Created by BlueT on 2017/3/7.
  */
-public interface IOptionService {
+public interface IOptionService extends IService<OptionVo> {
 
     void insertOption(OptionVo optionVo);
 

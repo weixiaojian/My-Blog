@@ -13,6 +13,7 @@ import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class AuthController extends BaseController {
     @Resource
     private IUserService usersService;
 
-    @Resource
+    @Autowired
     private ILogService logService;
 
     @GetMapping(value = "/login")

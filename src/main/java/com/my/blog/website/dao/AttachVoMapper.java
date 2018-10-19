@@ -1,5 +1,6 @@
 package com.my.blog.website.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.my.blog.website.model.Vo.AttachVo;
 import com.my.blog.website.model.Vo.AttachVoExample;
 import java.util.List;
@@ -7,14 +8,12 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface AttachVoMapper {
+public interface AttachVoMapper extends BaseMapper<AttachVo> {
     long countByExample(AttachVoExample example);
 
     int deleteByExample(AttachVoExample example);
 
     int deleteByPrimaryKey(Integer id);
-
-    int insert(AttachVo record);
 
     int insertSelective(AttachVo record);
 

@@ -1,5 +1,6 @@
 package com.my.blog.website.dao;
 
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.my.blog.website.model.Vo.UserVo;
 import com.my.blog.website.model.Vo.UserVoExample;
 import java.util.List;
@@ -7,14 +8,12 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface UserVoMapper {
+public interface UserVoMapper extends BaseMapper<UserVo> {
     long countByExample(UserVoExample example);
 
     int deleteByExample(UserVoExample example);
 
     int deleteByPrimaryKey(Integer uid);
-
-    int insert(UserVo record);
 
     int insertSelective(UserVo record);
 

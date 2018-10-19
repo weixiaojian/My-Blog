@@ -1,5 +1,6 @@
 package com.my.blog.website.service;
 
+import com.baomidou.mybatisplus.service.IService;
 import com.my.blog.website.dto.MetaDto;
 import com.my.blog.website.model.Vo.MetaVo;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * 分类信息service接口
  * Created by BlueT on 2017/3/17.
  */
-public interface IMetaService {
+public interface IMetaService extends IService<MetaVo> {
     /**
      * 根据类型和名字查询项
      *
