@@ -1,5 +1,6 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.my.blog.website.dao.LogVoMapper;
@@ -7,12 +8,12 @@ import com.my.blog.website.service.ILogService;
 import com.my.blog.website.utils.DateKit;
 import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.model.Vo.LogVo;
-import com.my.blog.website.model.Vo.LogVoExample;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,10 +52,10 @@ public class LogServiceImpl extends ServiceImpl<LogVoMapper, LogVo> implements I
         if (limit < 1 || limit > WebConst.MAX_POSTS) {
             limit = 10;
         }
-        LogVoExample logVoExample = new LogVoExample();
-        logVoExample.setOrderByClause("id desc");
         PageHelper.startPage((page - 1) * limit, limit);
-        List<LogVo> logVos = logDao.selectByExample(logVoExample);
+        EntityWrapper<LogVo> logVoEntityWrapper = new EntityWrapper<>();
+        logVoEntityWrapper.orderDesc(Collections.singleton("id"));
+        List<LogVo> logVos = logDao.selectList(logVoEntityWrapper);
         LOGGER.debug("Exit getLogs method");
         return logVos;
     }

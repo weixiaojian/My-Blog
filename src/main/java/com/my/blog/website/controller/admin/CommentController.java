@@ -4,7 +4,6 @@ import com.github.pagehelper.PageInfo;
 import com.my.blog.website.controller.BaseController;
 import com.my.blog.website.model.Bo.RestResponseBo;
 import com.my.blog.website.model.Vo.CommentVo;
-import com.my.blog.website.model.Vo.CommentVoExample;
 import com.my.blog.website.model.Vo.UserVo;
 import com.my.blog.website.service.ICommentService;
 import org.slf4j.Logger;
@@ -31,10 +30,8 @@ public class CommentController extends BaseController {
     public String index(@RequestParam(value = "page", defaultValue = "1") int page,
                         @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
         UserVo users = this.user(request);
-        CommentVoExample commentVoExample = new CommentVoExample();
-        commentVoExample.setOrderByClause("coid desc");
-        commentVoExample.createCriteria().andAuthorIdNotEqualTo(users.getUid());
-        PageInfo<CommentVo> commentsPaginator = commentsService.getCommentsWithPage(commentVoExample, page, limit);
+
+        PageInfo<CommentVo> commentsPaginator = commentsService.getCommentsWithPage(users, page, limit);
         request.setAttribute("comments", commentsPaginator);
         return "admin/comment_list";
     }

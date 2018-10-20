@@ -1,5 +1,6 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -9,7 +10,6 @@ import com.my.blog.website.dao.MetaVoMapper;
 import com.my.blog.website.dto.Types;
 import com.my.blog.website.exception.TipException;
 import com.my.blog.website.model.Vo.ContentVo;
-import com.my.blog.website.model.Vo.ContentVoExample;
 import com.my.blog.website.service.IContentService;
 import com.my.blog.website.service.IMetaService;
 import com.my.blog.website.service.IRelationshipService;
@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -73,9 +74,11 @@ public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> 
                 return "路径太短了";
             }
             if (!TaleUtils.isPath(contents.getSlug())) return "您输入的路径不合法";
-            ContentVoExample contentVoExample = new ContentVoExample();
-            contentVoExample.createCriteria().andTypeEqualTo(contents.getType()).andStatusEqualTo(contents.getSlug());
-            long count = contentDao.countByExample(contentVoExample);
+            EntityWrapper<ContentVo> contentVoEntityWrapper = new EntityWrapper<>();
+            contentVoEntityWrapper
+                    .where("type = {0}", contents.getType())
+                    .and("status = {0}", contents.getSlug());
+            Integer count = contentDao.selectCount(contentVoEntityWrapper);
             if (count > 0) return "该路径已经存在，请重新输入";
         } else {
             contents.setSlug(null);
@@ -86,6 +89,8 @@ public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> 
         int time = DateKit.getCurrentUnixTime();
         contents.setCreated(time);
         contents.setModified(time);
+        // TODO: 2018/10/20 前台缺少是否允许评论按钮,此处为解决缺失allowComment后续操作NPE, 而设置默认不允许评论
+        contents.setAllowComment(false);
         contents.setHits(0);
         contents.setCommentsNum(0);
 
@@ -101,12 +106,12 @@ public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> 
     @Override
     public PageInfo<ContentVo> getContents(Integer p, Integer limit) {
         LOGGER.debug("Enter getContents method");
-        ContentVoExample example = new ContentVoExample();
-        example.setOrderByClause("created desc");
-        example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
         PageHelper.startPage(p, limit);
-        List<ContentVo> data = contentDao.selectByExampleWithBLOBs(example);
-        PageInfo<ContentVo> pageInfo = new PageInfo<>(data);
+        EntityWrapper<ContentVo> contentVoEntityWrapper = new EntityWrapper<>();
+        contentVoEntityWrapper.where("type = {0} AND status = {1}", Types.ARTICLE.getType(), Types.PUBLISH.getType())
+                .orderDesc(Collections.singleton("created"));
+        List<ContentVo> contentVos = contentDao.selectList(contentVoEntityWrapper);
+        PageInfo<ContentVo> pageInfo = new PageInfo<>(contentVos);
         LOGGER.debug("Exit getContents method");
         return pageInfo;
     }
@@ -115,12 +120,11 @@ public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> 
     public ContentVo getContents(String id) {
         if (StringUtils.isNotBlank(id)) {
             if (Tools.isNumber(id)) {
-                ContentVo contentVo = contentDao.selectById(Integer.valueOf(id));
-                return contentVo;
+                return contentDao.selectById(Integer.valueOf(id));
             } else {
-                ContentVoExample contentVoExample = new ContentVoExample();
-                contentVoExample.createCriteria().andSlugEqualTo(id);
-                List<ContentVo> contentVos = contentDao.selectByExampleWithBLOBs(contentVoExample);
+                EntityWrapper<ContentVo> contentVoEntityWrapper = new EntityWrapper<>();
+                contentVoEntityWrapper.where("slug = {0}", id);
+                List<ContentVo> contentVos = contentDao.selectList(contentVoEntityWrapper);
                 if (contentVos.size() != 1) {
                     throw new TipException("query content by id and return is not one");
                 }
@@ -133,7 +137,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> 
     @Override
     public void updateContentByCid(ContentVo contentVo) {
         if (null != contentVo && null != contentVo.getCid()) {
-            contentDao.updateByPrimaryKeySelective(contentVo);
+            contentDao.updateById(contentVo);
         }
     }
 
@@ -150,20 +154,22 @@ public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> 
     @Override
     public PageInfo<ContentVo> getArticles(String keyword, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        ContentVoExample contentVoExample = new ContentVoExample();
-        ContentVoExample.Criteria criteria = contentVoExample.createCriteria();
-        criteria.andTypeEqualTo(Types.ARTICLE.getType());
-        criteria.andStatusEqualTo(Types.PUBLISH.getType());
-        criteria.andTitleLike("%" + keyword + "%");
-        contentVoExample.setOrderByClause("created desc");
-        List<ContentVo> contentVos = contentDao.selectByExampleWithBLOBs(contentVoExample);
+
+        EntityWrapper<ContentVo> contentVoEntityWrapper = new EntityWrapper<>();
+        contentVoEntityWrapper.where("type = {0} AND status = {1}", Types.ARTICLE.getType(), Types.PUBLISH.getType())
+                .like("title", keyword)
+                .orderDesc(Collections.singleton("created"));
+        List<ContentVo> contentVos = contentDao.selectList(contentVoEntityWrapper);
         return new PageInfo<>(contentVos);
     }
 
     @Override
-    public PageInfo<ContentVo> getArticlesWithpage(ContentVoExample commentVoExample, Integer page, Integer limit) {
+    public PageInfo<ContentVo> getArticlesWithPageAndType(Types type, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        List<ContentVo> contentVos = contentDao.selectByExampleWithBLOBs(commentVoExample);
+        EntityWrapper<ContentVo> contentVoEntityWrapper = new EntityWrapper<>();
+        contentVoEntityWrapper.where("type = {0}", type.getType())
+                .orderDesc(Collections.singleton("created"));
+        List<ContentVo> contentVos = contentDao.selectList(contentVoEntityWrapper);
         return new PageInfo<>(contentVos);
     }
 
@@ -172,7 +178,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> 
     public String deleteByCid(Integer cid) {
         ContentVo contents = this.getContents(cid + "");
         if (null != contents) {
-            contentDao.deleteByPrimaryKey(cid);
+            contentDao.deleteById(cid);
             relationshipService.deleteById(cid, null);
             return WebConst.SUCCESS_RESULT;
         }
@@ -183,9 +189,9 @@ public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> 
     public void updateCategory(String ordinal, String newCatefory) {
         ContentVo contentVo = new ContentVo();
         contentVo.setCategories(newCatefory);
-        ContentVoExample example = new ContentVoExample();
-        example.createCriteria().andCategoriesEqualTo(ordinal);
-        contentDao.updateByExampleSelective(contentVo, example);
+        EntityWrapper<ContentVo> contentVoEntityWrapper = new EntityWrapper<>();
+        contentVoEntityWrapper.where("categories = {0}", ordinal);
+        contentDao.update(contentVo, contentVoEntityWrapper);
     }
 
     @Override
@@ -219,7 +225,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> 
         Integer cid = contents.getCid();
         contents.setContent(EmojiParser.parseToAliases(contents.getContent()));
 
-        contentDao.updateByPrimaryKeySelective(contents);
+        contentDao.updateById(contents);
         relationshipService.deleteById(cid, null);
         metasService.saveMetas(cid, contents.getTags(), Types.TAG.getType());
         metasService.saveMetas(cid, contents.getCategories(), Types.CATEGORY.getType());

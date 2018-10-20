@@ -2,37 +2,9 @@ package com.my.blog.website.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.my.blog.website.model.Vo.CommentVo;
-import com.my.blog.website.model.Vo.CommentVoExample;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Component;
-
-@Component
+@Repository
 public interface CommentVoMapper extends BaseMapper<CommentVo> {
-    long countByExample(CommentVoExample example);
 
-    int deleteByExample(CommentVoExample example);
-
-    int deleteByPrimaryKey(Integer coid);
-
-    int insertSelective(CommentVo record);
-
-    List<CommentVo> selectByExampleWithBLOBs(CommentVoExample example);
-
-    List<CommentVo> selectByExample(CommentVoExample example);
-
-    CommentVo selectByPrimaryKey(Integer coid);
-
-    int updateByExampleSelective(@Param("record") CommentVo record, @Param("example") CommentVoExample example);
-
-    int updateByExampleWithBLOBs(@Param("record") CommentVo record, @Param("example") CommentVoExample example);
-
-    int updateByExample(@Param("record") CommentVo record, @Param("example") CommentVoExample example);
-
-    int updateByPrimaryKeySelective(CommentVo record);
-
-    int updateByPrimaryKeyWithBLOBs(CommentVo record);
-
-    int updateByPrimaryKey(CommentVo record);
 }

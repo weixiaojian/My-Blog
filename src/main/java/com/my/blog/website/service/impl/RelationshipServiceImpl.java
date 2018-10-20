@@ -1,7 +1,7 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.my.blog.website.model.Vo.RelationshipVoExample;
 import com.my.blog.website.model.Vo.RelationshipVoKey;
 import com.my.blog.website.service.IRelationshipService;
 import com.my.blog.website.dao.RelationshipVoMapper;
@@ -24,28 +24,17 @@ public class RelationshipServiceImpl extends ServiceImpl<RelationshipVoMapper, R
 
     @Override
     public void deleteById(Integer cid, Integer mid) {
-        RelationshipVoExample relationshipVoExample = new RelationshipVoExample();
-        RelationshipVoExample.Criteria criteria = relationshipVoExample.createCriteria();
-        if (cid != null) {
-            criteria.andCidEqualTo(cid);
-        }
-        if (mid != null) {
-            criteria.andMidEqualTo(mid);
-        }
-        relationshipVoMapper.deleteByExample(relationshipVoExample);
+
+        EntityWrapper<RelationshipVoKey> wrapper = wrapper(cid, mid);
+        relationshipVoMapper.delete(wrapper);
     }
 
     @Override
     public List<RelationshipVoKey> getRelationshipById(Integer cid, Integer mid) {
-        RelationshipVoExample relationshipVoExample = new RelationshipVoExample();
-        RelationshipVoExample.Criteria criteria = relationshipVoExample.createCriteria();
-        if (cid != null) {
-            criteria.andCidEqualTo(cid);
-        }
-        if (mid != null) {
-            criteria.andMidEqualTo(mid);
-        }
-        return relationshipVoMapper.selectByExample(relationshipVoExample);
+
+        EntityWrapper<RelationshipVoKey> wrapper = wrapper(cid, mid);
+
+        return relationshipVoMapper.selectList(wrapper);
     }
 
     @Override
@@ -56,16 +45,29 @@ public class RelationshipServiceImpl extends ServiceImpl<RelationshipVoMapper, R
     @Override
     public Long countById(Integer cid, Integer mid) {
         LOGGER.debug("Enter countById method:cid={},mid={}",cid,mid);
-        RelationshipVoExample relationshipVoExample = new RelationshipVoExample();
-        RelationshipVoExample.Criteria criteria = relationshipVoExample.createCriteria();
-        if (cid != null) {
-            criteria.andCidEqualTo(cid);
-        }
-        if (mid != null) {
-            criteria.andMidEqualTo(mid);
-        }
-        long num = relationshipVoMapper.countByExample(relationshipVoExample);
+
+        EntityWrapper<RelationshipVoKey> wrapper = wrapper(cid, mid);
+
+        long num = relationshipVoMapper.selectCount(wrapper);
         LOGGER.debug("Exit countById method return num={}",num);
         return num;
+    }
+
+    /**
+     * 构造查询参数
+     * @param cid
+     * @param mid
+     * @return
+     */
+    private EntityWrapper<RelationshipVoKey> wrapper(Integer cid, Integer mid) {
+        EntityWrapper<RelationshipVoKey> wrapper = new EntityWrapper<>();
+        wrapper.where("1=1");
+        if (cid != null) {
+            wrapper.and("cid = {0}", cid);
+        }
+        if (mid != null) {
+            wrapper.and("mid = {0}", mid);
+        }
+        return wrapper;
     }
 }

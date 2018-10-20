@@ -47,9 +47,7 @@ public class SettingController extends BaseController {
     public String setting(HttpServletRequest request) {
         List<OptionVo> voList = optionService.getOptions();
         Map<String, String> options = new HashMap<>();
-        voList.forEach((option) -> {
-            options.put(option.getName(), option.getValue());
-        });
+        voList.forEach((option) -> options.put(option.getName(), option.getValue()));
         if (options.get("site_record") == null) {
             options.put("site_record", "");
         }

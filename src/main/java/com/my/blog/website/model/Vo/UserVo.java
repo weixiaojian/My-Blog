@@ -47,7 +47,7 @@ public class UserVo implements Serializable {
     /**
      * 用户注册时的GMT unix时间戳
      */
-    private Integer created;
+    private Long created;
 
     /**
      * 最后活动时间

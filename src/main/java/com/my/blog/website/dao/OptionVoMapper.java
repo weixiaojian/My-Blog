@@ -2,34 +2,12 @@ package com.my.blog.website.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.my.blog.website.model.Vo.OptionVo;
-import com.my.blog.website.model.Vo.OptionVoExample;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Component;
-
-@Component
+@Repository
 public interface OptionVoMapper extends BaseMapper<OptionVo> {
-    long countByExample(OptionVoExample example);
-
-    int deleteByExample(OptionVoExample example);
-
-    int deleteByPrimaryKey(String name);
-
-    int insertSelective(OptionVo record);
-
-    List<OptionVo> selectByExample(OptionVoExample example);
-
-    OptionVo selectByPrimaryKey(String name);
-
-    int updateByExampleSelective(@Param("record") OptionVo record, @Param("example") OptionVoExample example);
-
-    int updateByExample(@Param("record") OptionVo record, @Param("example") OptionVoExample example);
-
-    int updateByPrimaryKeySelective(OptionVo record);
-
-    int updateByPrimaryKey(OptionVo record);
 
     /**
      * 批量保存

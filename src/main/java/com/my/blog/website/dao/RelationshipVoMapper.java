@@ -1,26 +1,10 @@
 package com.my.blog.website.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.my.blog.website.model.Vo.RelationshipVoExample;
 import com.my.blog.website.model.Vo.RelationshipVoKey;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Component;
-
-@Component
+@Repository
 public interface RelationshipVoMapper extends BaseMapper<RelationshipVoKey>{
-    long countByExample(RelationshipVoExample example);
 
-    int deleteByExample(RelationshipVoExample example);
-
-    int deleteByPrimaryKey(RelationshipVoKey key);
-
-    int insertSelective(RelationshipVoKey record);
-
-    List<RelationshipVoKey> selectByExample(RelationshipVoExample example);
-
-    int updateByExampleSelective(@Param("record") RelationshipVoKey record, @Param("example") RelationshipVoExample example);
-
-    int updateByExample(@Param("record") RelationshipVoKey record, @Param("example") RelationshipVoExample example);
 }

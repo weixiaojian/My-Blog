@@ -1,16 +1,17 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.exception.TipException;
+import com.my.blog.website.model.Vo.UserVo;
 import com.my.blog.website.utils.DateKit;
 import com.my.blog.website.utils.TaleUtils;
 import com.my.blog.website.dao.CommentVoMapper;
 import com.my.blog.website.model.Bo.CommentBo;
 import com.my.blog.website.model.Vo.CommentVo;
-import com.my.blog.website.model.Vo.CommentVoExample;
 import com.my.blog.website.model.Vo.ContentVo;
 import com.my.blog.website.service.ICommentService;
 import com.my.blog.website.service.IContentService;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -80,10 +82,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentVoMapper, CommentVo> 
 
         if (null != cid) {
             PageHelper.startPage(page, limit);
-            CommentVoExample commentVoExample = new CommentVoExample();
-            commentVoExample.createCriteria().andCidEqualTo(cid).andParentEqualTo(0).andStatusIsNotNull().andStatusEqualTo("approved");
-            commentVoExample.setOrderByClause("coid desc");
-            List<CommentVo> parents = commentDao.selectByExampleWithBLOBs(commentVoExample);
+            EntityWrapper<CommentVo> commentVoEntityWrapper = new EntityWrapper<>();
+            commentVoEntityWrapper.where("cid = {0} AND parent = {1}", cid, 0)
+                    .isNotNull("status")
+                    .where("status = {0}", "approved");
+            List<CommentVo> parents = commentDao.selectList(commentVoEntityWrapper);
             PageInfo<CommentVo> commentPaginator = new PageInfo<>(parents);
             PageInfo<CommentBo> returnBo = copyPageInfo(commentPaginator);
             if (parents.size() != 0) {
@@ -100,18 +103,21 @@ public class CommentServiceImpl extends ServiceImpl<CommentVoMapper, CommentVo> 
     }
 
     @Override
-    public PageInfo<CommentVo> getCommentsWithPage(CommentVoExample commentVoExample, int page, int limit) {
+    public PageInfo<CommentVo> getCommentsWithPage(UserVo user, int page, int limit) {
         PageHelper.startPage(page, limit);
-        List<CommentVo> commentVos = commentDao.selectByExampleWithBLOBs(commentVoExample);
-        PageInfo<CommentVo> pageInfo = new PageInfo<>(commentVos);
-        return pageInfo;
+        EntityWrapper<CommentVo> commentVoEntityWrapper = new EntityWrapper<>();
+        commentVoEntityWrapper
+                .where("author_id != {0}", user.getUid())
+                .orderDesc(Collections.singleton("coid"));
+        List<CommentVo> commentVos = commentDao.selectList(commentVoEntityWrapper);
+        return new PageInfo<>(commentVos);
     }
 
     @Override
     @Transactional
     public void update(CommentVo comments) {
         if (null != comments && null != comments.getCoid()) {
-            commentDao.updateByPrimaryKeyWithBLOBs(comments);
+            commentDao.updateById(comments);
         }
     }
 
@@ -121,7 +127,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentVoMapper, CommentVo> 
         if (null == coid) {
             throw new TipException("主键为空");
         }
-        commentDao.deleteByPrimaryKey(coid);
+        commentDao.deleteById(coid);
         ContentVo contents = contentService.getContents(cid + "");
         if (null != contents && contents.getCommentsNum() > 0) {
             ContentVo temp = new ContentVo();
@@ -134,7 +140,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentVoMapper, CommentVo> 
     @Override
     public CommentVo getCommentById(Integer coid) {
         if (null != coid) {
-            return commentDao.selectByPrimaryKey(coid);
+            return commentDao.selectById(coid);
         }
         return null;
     }

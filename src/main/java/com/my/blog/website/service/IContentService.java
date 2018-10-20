@@ -2,8 +2,8 @@ package com.my.blog.website.service;
 
 import com.baomidou.mybatisplus.service.IService;
 import com.github.pagehelper.PageInfo;
+import com.my.blog.website.dto.Types;
 import com.my.blog.website.model.Vo.ContentVo;
-import com.my.blog.website.model.Vo.ContentVoExample;
 
 /**
  * Created by Administrator on 2017/3/13 013.
@@ -66,12 +66,12 @@ public interface IContentService extends IService<ContentVo>{
 
 
     /**
-     * @param commentVoExample
+     * @param type
      * @param page
      * @param limit
      * @return
      */
-    PageInfo<ContentVo> getArticlesWithpage(ContentVoExample commentVoExample, Integer page, Integer limit);
+    PageInfo<ContentVo> getArticlesWithPageAndType(Types type, Integer page, Integer limit);
     /**
      * 根据文章id删除
      * @param cid

@@ -3,8 +3,8 @@ package com.my.blog.website.service;
 import com.baomidou.mybatisplus.service.IService;
 import com.github.pagehelper.PageInfo;
 import com.my.blog.website.model.Vo.CommentVo;
-import com.my.blog.website.model.Vo.CommentVoExample;
 import com.my.blog.website.model.Bo.CommentBo;
+import com.my.blog.website.model.Vo.UserVo;
 
 /**
  * Created by BlueT on 2017/3/16.
@@ -28,12 +28,11 @@ public interface ICommentService extends IService<CommentVo> {
 
     /**
      * 获取文章下的评论
-     * @param commentVoExample
      * @param page
      * @param limit
      * @return CommentVo
      */
-    PageInfo<CommentVo> getCommentsWithPage(CommentVoExample commentVoExample, int page, int limit);
+    PageInfo<CommentVo> getCommentsWithPage(UserVo userVo, int page, int limit);
 
 
     /**

@@ -1,24 +1,27 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.github.pagehelper.PageHelper;
-import com.my.blog.website.dao.AttachVoMapper;
-import com.my.blog.website.dto.MetaDto;
-import com.my.blog.website.exception.TipException;
-import com.my.blog.website.model.Bo.ArchiveBo;
-import com.my.blog.website.model.Vo.*;
-import com.my.blog.website.service.ISiteService;
-import com.my.blog.website.utils.DateKit;
-import com.my.blog.website.utils.TaleUtils;
-import com.my.blog.website.utils.backup.Backup;
 import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.controller.admin.AttachController;
+import com.my.blog.website.dao.AttachVoMapper;
 import com.my.blog.website.dao.CommentVoMapper;
 import com.my.blog.website.dao.ContentVoMapper;
 import com.my.blog.website.dao.MetaVoMapper;
+import com.my.blog.website.dto.MetaDto;
 import com.my.blog.website.dto.Types;
+import com.my.blog.website.exception.TipException;
+import com.my.blog.website.model.Bo.ArchiveBo;
 import com.my.blog.website.model.Bo.BackResponseBo;
 import com.my.blog.website.model.Bo.StatisticsBo;
+import com.my.blog.website.model.Vo.CommentVo;
+import com.my.blog.website.model.Vo.ContentVo;
+import com.my.blog.website.model.Vo.MetaVo;
+import com.my.blog.website.service.ISiteService;
+import com.my.blog.website.utils.DateKit;
+import com.my.blog.website.utils.TaleUtils;
 import com.my.blog.website.utils.ZipUtils;
+import com.my.blog.website.utils.backup.Backup;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,12 +60,12 @@ public class SiteServiceImpl implements ISiteService {
         if (limit < 0 || limit > 10) {
             limit = 10;
         }
-        CommentVoExample example = new CommentVoExample();
-        example.setOrderByClause("created desc");
         PageHelper.startPage(1, limit);
-        List<CommentVo> byPage = commentDao.selectByExampleWithBLOBs(example);
+        EntityWrapper<CommentVo> commentVoEntityWrapper = new EntityWrapper<>();
+        commentVoEntityWrapper.orderDesc(Collections.singleton("created"));
+        List<CommentVo> commentVos = commentDao.selectList(commentVoEntityWrapper);
         LOGGER.debug("Exit recentComments method");
-        return byPage;
+        return commentVos;
     }
 
     @Override
@@ -71,11 +74,11 @@ public class SiteServiceImpl implements ISiteService {
         if (limit < 0 || limit > 10) {
             limit = 10;
         }
-        ContentVoExample example = new ContentVoExample();
-        example.createCriteria().andStatusEqualTo(Types.PUBLISH.getType()).andTypeEqualTo(Types.ARTICLE.getType());
-        example.setOrderByClause("created desc");
+        EntityWrapper<ContentVo> contentVoEntityWrapper = new EntityWrapper<>();
+        contentVoEntityWrapper.where("status = {0} AND type = {1}", Types.PUBLISH.getType(), Types.ARTICLE.getType())
+                .orderDesc(Collections.singleton("created"));
         PageHelper.startPage(1, limit);
-        List<ContentVo> list = contentDao.selectByExample(example);
+        List<ContentVo> list = contentDao.selectList(contentVoEntityWrapper);
         LOGGER.debug("Exit recentContents method");
         return list;
     }
@@ -146,7 +149,7 @@ public class SiteServiceImpl implements ISiteService {
     @Override
     public CommentVo getComment(Integer coid) {
         if (null != coid) {
-            return commentDao.selectByPrimaryKey(coid);
+            return commentDao.selectById(coid);
         }
         return null;
     }
@@ -156,17 +159,15 @@ public class SiteServiceImpl implements ISiteService {
         LOGGER.debug("Enter getStatistics method");
         StatisticsBo statistics = new StatisticsBo();
 
-        ContentVoExample contentVoExample = new ContentVoExample();
-        contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
-        Long articles =   contentDao.countByExample(contentVoExample);
+        Integer articles = contentDao.selectCount(new EntityWrapper<>());
 
-        Long comments = commentDao.countByExample(new CommentVoExample());
+        Integer comments = commentDao.selectCount(new EntityWrapper<>());
 
-        Long attachs = attachDao.countByExample(new AttachVoExample());
+        Integer attachs = attachDao.selectCount(new EntityWrapper<>());
 
-        MetaVoExample metaVoExample = new MetaVoExample();
-        metaVoExample.createCriteria().andTypeEqualTo(Types.LINK.getType());
-        Long links = metaDao.countByExample(metaVoExample);
+        EntityWrapper<MetaVo> metaEntityWrapper = new EntityWrapper<>();
+        metaEntityWrapper.where("type = {0}", Types.LINK.getType());
+        Integer links = metaDao.selectCount(metaEntityWrapper);
 
         statistics.setArticles(articles);
         statistics.setComments(comments);
@@ -182,16 +183,15 @@ public class SiteServiceImpl implements ISiteService {
         List<ArchiveBo> archives = contentDao.findReturnArchiveBo();
         if (null != archives) {
             archives.forEach(archive -> {
-                ContentVoExample example = new ContentVoExample();
-                ContentVoExample.Criteria criteria = example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
-                example.setOrderByClause("created desc");
+                EntityWrapper<ContentVo> contentVoEntityWrapper = new EntityWrapper<>();
+                contentVoEntityWrapper.where("type = {0} AND status = {1}", Types.ARTICLE.getType(), Types.PUBLISH.getType())
+                        .orderDesc(Collections.singleton("created"));
                 String date = archive.getDate();
                 Date sd = DateKit.dateFormat(date, "yyyy年MM月");
                 int start = DateKit.getUnixTimeByDate(sd);
                 int end = DateKit.getUnixTimeByDate(DateKit.dateAdd(DateKit.INTERVAL_MONTH, sd, 1)) - 1;
-                criteria.andCreatedGreaterThan(start);
-                criteria.andCreatedLessThan(end);
-                List<ContentVo> contentss = contentDao.selectByExample(example);
+                contentVoEntityWrapper.ge("created", start).lt("created", end);
+                List<ContentVo> contentss = contentDao.selectList(contentVoEntityWrapper);
                 archive.setArticles(contentss);
             });
         }

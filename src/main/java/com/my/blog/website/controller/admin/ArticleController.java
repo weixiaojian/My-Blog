@@ -9,7 +9,6 @@ import com.my.blog.website.dto.Types;
 import com.my.blog.website.exception.TipException;
 import com.my.blog.website.model.Bo.RestResponseBo;
 import com.my.blog.website.model.Vo.ContentVo;
-import com.my.blog.website.model.Vo.ContentVoExample;
 import com.my.blog.website.model.Vo.MetaVo;
 import com.my.blog.website.model.Vo.UserVo;
 import com.my.blog.website.service.IContentService;
@@ -48,10 +47,7 @@ public class ArticleController extends BaseController {
     @GetMapping(value = "")
     public String index(@RequestParam(value = "page", defaultValue = "1") int page,
                         @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
-        ContentVoExample contentVoExample = new ContentVoExample();
-        contentVoExample.setOrderByClause("created desc");
-        contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
-        PageInfo<ContentVo> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample, page, limit);
+        PageInfo<ContentVo> contentsPaginator = contentsService.getArticlesWithPageAndType(Types.ARTICLE, page, limit);
         request.setAttribute("articles", contentsPaginator);
         return "admin/article_list";
     }

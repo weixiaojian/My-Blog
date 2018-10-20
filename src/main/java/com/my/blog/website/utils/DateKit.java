@@ -398,6 +398,10 @@ public class DateKit {
         }
     }
 
+    public static long currentTime() {
+        return System.currentTimeMillis() / 1000;
+    }
+
     public static String getTime(int format) {
         StringBuffer cTime = new StringBuffer(10);
         Calendar time = Calendar.getInstance();

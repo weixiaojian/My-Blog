@@ -1,9 +1,9 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.my.blog.website.dao.OptionVoMapper;
 import com.my.blog.website.model.Vo.OptionVo;
-import com.my.blog.website.model.Vo.OptionVoExample;
 import com.my.blog.website.service.IOptionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class OptionServiceImpl extends ServiceImpl<OptionVoMapper, OptionVo> imp
     @Override
     public void insertOption(OptionVo optionVo) {
         LOGGER.debug("Enter insertOption method:optionVo={}", optionVo);
-        optionDao.insertSelective(optionVo);
+        optionDao.insert(optionVo);
         LOGGER.debug("Exit insertOption method.");
     }
 
@@ -40,10 +40,10 @@ public class OptionServiceImpl extends ServiceImpl<OptionVoMapper, OptionVo> imp
         OptionVo optionVo = new OptionVo();
         optionVo.setName(name);
         optionVo.setValue(value);
-        if (optionDao.selectByPrimaryKey(name) == null) {
-            optionDao.insertSelective(optionVo);
+        if (optionDao.selectById(name) == null) {
+            optionDao.insert(optionVo);
         } else {
-            optionDao.updateByPrimaryKeySelective(optionVo);
+            optionDao.updateById(optionVo);
         }
         LOGGER.debug("Exit insertOption method.");
     }
@@ -58,11 +58,11 @@ public class OptionServiceImpl extends ServiceImpl<OptionVoMapper, OptionVo> imp
 
     @Override
     public OptionVo getOptionByName(String name) {
-        return optionDao.selectByPrimaryKey(name);
+        return optionDao.selectById(name);
     }
 
     @Override
     public List<OptionVo> getOptions() {
-        return optionDao.selectByExample(new OptionVoExample());
+        return optionDao.selectList(new EntityWrapper<>());
     }
 }

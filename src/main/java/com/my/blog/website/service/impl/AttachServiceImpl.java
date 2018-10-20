@@ -1,12 +1,12 @@
 package com.my.blog.website.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.my.blog.website.dao.AttachVoMapper;
 import com.my.blog.website.utils.DateKit;
 import com.my.blog.website.model.Vo.AttachVo;
-import com.my.blog.website.model.Vo.AttachVoExample;
 import com.my.blog.website.service.IAttachService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,16 +29,15 @@ public class AttachServiceImpl extends ServiceImpl<AttachVoMapper, AttachVo> imp
     @Override
     public PageInfo<AttachVo> getAttachs(Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        AttachVoExample attachVoExample = new AttachVoExample();
-        attachVoExample.setOrderByClause("id desc");
-        List<AttachVo> attachVos = attachDao.selectByExample(attachVoExample);
+        EntityWrapper<AttachVo> attachVoEntityWrapper = new EntityWrapper<>();
+        List<AttachVo> attachVos = attachDao.selectList(attachVoEntityWrapper);
         return new PageInfo<>(attachVos);
     }
 
     @Override
     public AttachVo selectById(Integer id) {
         if(null != id){
-            return attachDao.selectByPrimaryKey(id);
+            return attachDao.selectById(id);
         }
         return null;
     }
@@ -52,14 +51,14 @@ public class AttachServiceImpl extends ServiceImpl<AttachVoMapper, AttachVo> imp
         attach.setFkey(fkey);
         attach.setFtype(ftype);
         attach.setCreated(DateKit.getCurrentUnixTime());
-        attachDao.insertSelective(attach);
+        attachDao.insert(attach);
     }
 
     @Override
     @Transactional
     public void deleteById(Integer id) {
         if (null != id) {
-            attachDao.deleteByPrimaryKey( id);
+            attachDao.deleteById( id);
         }
     }
 }
