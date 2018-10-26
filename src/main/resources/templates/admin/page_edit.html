@@ -3,6 +3,9 @@
 <header th:replace="admin/header::headerFragment(${title},${active})"></header>
 <link th:href="@{/admin/plugins/toggles/toggles.css}" rel="stylesheet"/>
 <link th:href="@{/admin/plugins/md/css/style.css}" rel="stylesheet"/>
+
+<link th:href="@{/admin/plugins/tagsinput/jquery.tagsinput.css}" rel="stylesheet"/>
+
 <body class="fixed-left">
 <div id="wrapper">
     <div th:replace="admin/header::header-body"></div>
@@ -26,6 +29,15 @@
                             <input type="hidden" name="cid" th:value="${contents!=null and contents.cid!=null}?${contents.cid}: ''" id="cid"/>
                             <input type="hidden" name="status" th:value="${contents!=null and contents.status !=null}?${contents.status}: 'publish'" id="status"/>
                             <input type="hidden" name="content" id="content-editor"/>
+                            <input type="hidden" name="allowComment"
+                                   th:value="${contents!=null and contents.allowComment !=null}?${contents.allowComment}: true"
+                                   id="allow_comment"/>
+                            <input type="hidden" name="allowPing"
+                                   th:value="${contents!=null and contents.allowPing !=null}?${contents.allowPing}: true"
+                                   id="allow_ping"/>
+                            <input type="hidden" name="allowFeed"
+                                   th:value="${contents!=null and contents.allowFeed !=null}?${contents.allowFeed}: true"
+                                   id="allow_feed"/>
 
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="请输入页面标题" name="title" required=""
@@ -39,6 +51,30 @@
 
                             <div class="form-group">
                                 <textarea style="height: 450px" autocomplete="off" id="text" name="text" class="markdown-textarea" th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
+                            </div>
+
+                            <div class="form-group col-md-3 col-sm-4">
+                                <label class="col-sm-4">开启评论</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${contents!=null and contents.allowComment!=null }?'toggle toggle-success allow-'+${contents.allowComment}:'toggle toggle-success allow-true'"
+                                         onclick="allow_comment(this);"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3 col-sm-4">
+                                <label class="col-sm-4">允许Ping</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${contents!=null and contents.allowPing !=null}?'toggle toggle-success allow-'+${contents.allowPing}:'toggle toggle-success allow-true'"
+                                         onclick="allow_ping(this);"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3 col-sm-4">
+                                <label class="col-sm-4">允许订阅</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${contents!=null and  contents.allowFeed !=null}?'toggle toggle-success allow-'+${contents.allowFeed}: 'toggle toggle-success allow-true'"
+                                         onclick="allow_feed(this);"></div>
+                                </div>
                             </div>
 
                             <div class="text-right">
@@ -61,9 +97,14 @@
 <script th:src="@{/admin/plugins/md/js/diff.js}"></script>
 <script th:src="@{/admin/plugins/md/js/md.js}"></script>
 
+<script th:src="@{/admin/plugins/tagsinput/jquery.tagsinput.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/localization/messages_zh.min.js}"></script>
+
+<script th:src="@{//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
+<script th:src="@{/admin/js/article.js}"></script>
 <script type="text/javascript">
     /*<![CDATA[*/
     var tale = new $.tale();
@@ -102,6 +143,7 @@
 
     markdown(textarea, toolbar, preview);
     /*]]>*/
+
 </script>
 
 </body>

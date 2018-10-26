@@ -56,7 +56,9 @@ public class PageController extends BaseController {
     @ResponseBody
     public RestResponseBo publishPage(@RequestParam String title, @RequestParam String content,
                                       @RequestParam String status, @RequestParam String slug,
-                                      @RequestParam(required = false) Integer allowComment, @RequestParam(required = false) Integer allowPing, HttpServletRequest request) {
+                                      @RequestParam(required = false) Boolean allowComment, @RequestParam(required = false) Boolean allowPing,
+                                      @RequestParam(required = false) Boolean allowFeed,
+                                      HttpServletRequest request) {
 
         UserVo users = this.user(request);
         ContentVo contents = new ContentVo();
@@ -65,12 +67,9 @@ public class PageController extends BaseController {
         contents.setStatus(status);
         contents.setSlug(slug);
         contents.setType(Types.PAGE.getType());
-        if (null != allowComment) {
-            contents.setAllowComment(allowComment == 1);
-        }
-        if (null != allowPing) {
-            contents.setAllowPing(allowPing == 1);
-        }
+        contents.setAllowComment(allowComment);
+        contents.setAllowPing(allowPing);
+        contents.setAllowFeed(allowFeed);
         contents.setAuthorId(users.getUid());
         String result = contentsService.publish(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
@@ -84,7 +83,8 @@ public class PageController extends BaseController {
     public RestResponseBo modifyArticle(@RequestParam Integer cid, @RequestParam String title,
                                         @RequestParam String content,
                                         @RequestParam String status, @RequestParam String slug,
-                                        @RequestParam(required = false) Integer allowComment, @RequestParam(required = false) Integer allowPing, HttpServletRequest request) {
+                                        @RequestParam(required = false) Boolean allowComment, @RequestParam(required = false) Boolean allowPing,
+                                        @RequestParam(required = false) Boolean allowFeed, HttpServletRequest request) {
 
         UserVo users = this.user(request);
         ContentVo contents = new ContentVo();
@@ -94,12 +94,9 @@ public class PageController extends BaseController {
         contents.setStatus(status);
         contents.setSlug(slug);
         contents.setType(Types.PAGE.getType());
-        if (null != allowComment) {
-            contents.setAllowComment(allowComment == 1);
-        }
-        if (null != allowPing) {
-            contents.setAllowPing(allowPing == 1);
-        }
+        contents.setAllowComment(allowComment);
+        contents.setAllowPing(allowPing);
+        contents.setAllowFeed(allowFeed);
         contents.setAuthorId(users.getUid());
         String result = contentsService.updateArticle(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
