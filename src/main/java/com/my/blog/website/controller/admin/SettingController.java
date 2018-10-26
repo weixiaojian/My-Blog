@@ -64,9 +64,7 @@ public class SettingController extends BaseController {
         try {
             Map<String, String[]> parameterMap = request.getParameterMap();
             Map<String, String> querys = new HashMap<>();
-            parameterMap.forEach((key, value) -> {
-                querys.put(key, join(value));
-            });
+            parameterMap.forEach((key, value) -> querys.put(key, join(value)));
             optionService.saveOptions(querys);
             WebConst.initConfig = querys;
             if (StringUtils.isNotBlank(site_theme)) {

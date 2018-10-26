@@ -260,7 +260,7 @@ public class TaleUtils {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         try {
-            response.sendRedirect(Commons.site_url());
+            response.sendRedirect(Commons.site_option("site_home"));
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
