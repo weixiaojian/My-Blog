@@ -1,5 +1,7 @@
 package com.my.blog.website.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -10,6 +12,7 @@ import java.util.Enumeration;
  * ip工具类
  * Created by BlueT on 2017/3/9.
  */
+@Slf4j
 public class IPKit {
     /**
      * @param request 请求
@@ -26,6 +29,7 @@ public class IPKit {
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
+        System.out.println("新的来访者,IP: " + ip);
         return ip;
     }
 

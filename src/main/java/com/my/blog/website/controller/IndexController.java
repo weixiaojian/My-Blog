@@ -95,12 +95,15 @@ public class IndexController extends BaseController {
         if (null == contents || "draft".equals(contents.getStatus())) {
             return this.render_404();
         }
+        Integer hits = cache.hget("article" + cid, "hits");
+        if (!checkHitsFrequency(request, cid)) {
+            hits = hits == null ? 1 : hits + 1;
+            updateArticleHit(contents.getCid(), contents.getHits());
+        }
+        contents.setHits((hits == null ? 0 : hits) + contents.getHits());
         request.setAttribute("article", contents);
         request.setAttribute("is_post", true);
         completeArticle(request, contents);
-        if (!checkHitsFrequency(request, cid)) {
-            updateArticleHit(contents.getCid(), contents.getHits());
-        }
         return this.render("post");
 
 
@@ -357,7 +360,8 @@ public class IndexController extends BaseController {
             temp.setCid(cid);
             temp.setHits(chits + hits);
             contentService.updateContentByCid(temp);
-            cache.hset("article" + cid, "hits", 1);
+//            cache.hdel("article" + cid, "hits");
+            cache.hset("article" + cid, "hits", 0);
         } else {
             cache.hset("article" + cid, "hits", hits);
         }

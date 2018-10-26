@@ -47,7 +47,7 @@ public class WebConst {
     /**
      * 点击次数超过多少更新到数据库
      */
-    public static final int HIT_EXCEED = 10;
+    public static final int HIT_EXCEED = 5;
 
     /**
      * 上传文件最大1M
@@ -60,7 +60,7 @@ public class WebConst {
     public static String SUCCESS_RESULT = "SUCCESS";
 
     /**
-     * 同一篇文章在2个小时内无论点击多少次只算一次阅读
+     * 同一篇文章同一IP在2个小时内无论点击多少次只算一次阅读
      */
     public static Integer HITS_LIMIT_TIME = 7200;
 }
