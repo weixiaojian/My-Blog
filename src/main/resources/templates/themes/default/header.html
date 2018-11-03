@@ -16,10 +16,14 @@
     <link th:href="@{/user/css/style.min.css}" rel="stylesheet"/>
     <script th:src="@{//cdn.bootcss.com/jquery/2.2.3/jquery.min.js}"></script>
 
+    <!--zoom.css-->
+    <link th:href="@{/user/css/zoom.css}" rel="stylesheet"/>
     <!--[if lt IE 9]>
     <script src="//cdn.bootcss.com/html5shiv/r29/html5.min.js"></script>
     <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <script th:src="@{/admin/js/zoom.min.js}"></script>
+    <script th:src="@{/admin/js/transition.js}"></script>
 </head>
 <body  gtools_scp_screen_capture_injected="true" th:class="${is_post}?'':'bg-grey'">
 <!--[if lt IE 8]>
