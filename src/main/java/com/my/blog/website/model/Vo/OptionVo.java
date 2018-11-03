@@ -16,7 +16,7 @@ public class OptionVo implements Serializable {
     /**
      * 配置名称
      */
-    @TableId(value = "name", type = IdType.AUTO)
+    @TableId(value = "name", type = IdType.INPUT)
     private String name;
 
     /**
