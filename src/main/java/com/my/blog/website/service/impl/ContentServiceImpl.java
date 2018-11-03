@@ -89,8 +89,6 @@ public class ContentServiceImpl extends ServiceImpl<ContentVoMapper, ContentVo> 
         int time = DateKit.getCurrentUnixTime();
         contents.setCreated(time);
         contents.setModified(time);
-        // TODO: 2018/10/20 前台缺少是否允许评论按钮,此处为解决缺失allowComment后续操作NPE, 而设置默认不允许评论
-        contents.setAllowComment(false);
         contents.setHits(0);
         contents.setCommentsNum(0);
 

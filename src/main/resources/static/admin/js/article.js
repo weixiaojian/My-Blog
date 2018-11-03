@@ -69,41 +69,18 @@ preview = $('<div id="md-preview" class="md-hidetab" />').insertAfter('.markdown
 markdown(textarea, toolbar, preview);
 
 
-function allow_comment(obj) {
-    var this_ = $(obj);
-    var on = this_.find('.toggle-on.active').length;
-    var off = this_.find('.toggle-off.active').length;
-    if (on == 1) {
-        $('#allow_comment').val(false);
-    }
-    if (off == 1) {
-        $('#allow_comment').val(true);
-    }
-}
-
-function allow_ping(obj) {
-    var this_ = $(obj);
-    var on = this_.find('.toggle-on.active').length;
-    var off = this_.find('.toggle-off.active').length;
-    if (on == 1) {
-        $('#allow_ping').val(false);
-    }
-    if (off == 1) {
-        $('#allow_ping').val(true);
-    }
-}
-
-
-function allow_feed(obj) {
-    var this_ = $(obj);
-    var on = this_.find('.toggle-on.active').length;
-    var off = this_.find('.toggle-off.active').length;
-    if (on == 1) {
-        $('#allow_feed').val(false);
-    }
-    if (off == 1) {
-        $('#allow_feed').val(true);
-    }
+function change_switch_button(id, obj) {
+    setTimeout(() => {
+        let this_ = $(obj);
+        let on = this_.find('.toggle-on.active').length;
+        let off = this_.find('.toggle-off.active').length;
+        if (on == 1) {
+            $('#'+id).val(true);
+        }
+        if (off == 1) {
+            $('#'+id).val(false);
+        }
+    }, 20)
 }
 
 $('div.allow-false').toggles({
