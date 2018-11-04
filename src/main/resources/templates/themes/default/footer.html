@@ -30,6 +30,7 @@
             </div>
         </div>
     </div>
+
     <div class="footer-meta">
         <div class="footer-container">
             <div class="meta-item meta-copyright">
@@ -152,7 +153,9 @@
         /*]]>*/
     </script>
 </th:block>
-
+    <iframe th:src="@{/xianliao}" height="500px" width="100%" style="position: fixed; right: 0; bottom: 0;"></iframe>
+<div id="xianliao" style="position: fixed; right: 0; bottom: 0;">
+</div>
 <script th:src="@{//cdn.bootcss.com/headroom/0.9.1/headroom.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/highlight.js/9.9.0/highlight.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/instantclick/3.0.1/instantclick.min.js}"></script>
@@ -171,6 +174,9 @@
         });
     }
 
+    $('#xianliao').click(function () {
+        alert(1)
+    })
 
     var header = new Headroom(document.getElementById("header"), {
         tolerance: 10,

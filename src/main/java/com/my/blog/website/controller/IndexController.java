@@ -5,6 +5,7 @@ import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.dto.ErrorCode;
 import com.my.blog.website.dto.MetaDto;
 import com.my.blog.website.dto.Types;
+import com.my.blog.website.exception.TipException;
 import com.my.blog.website.model.Bo.ArchiveBo;
 import com.my.blog.website.model.Bo.CommentBo;
 import com.my.blog.website.model.Bo.RestResponseBo;
@@ -15,6 +16,7 @@ import com.my.blog.website.service.ICommentService;
 import com.my.blog.website.service.IContentService;
 import com.my.blog.website.service.IMetaService;
 import com.my.blog.website.service.ISiteService;
+import com.my.blog.website.utils.Commons;
 import com.my.blog.website.utils.IPKit;
 import com.my.blog.website.utils.PatternKit;
 import com.my.blog.website.utils.TaleUtils;
@@ -52,6 +54,32 @@ public class IndexController extends BaseController {
 
     @Resource
     private ISiteService siteService;
+
+    /**
+     * 闲聊么 页面请求地址
+     * @return
+     */
+    @GetMapping("xianliao")
+    public String xianliao() {
+        return "comm/xianliaome";
+    }
+
+    /**
+     * 用于生成闲聊么 所需要的token信息
+     */
+    @GetMapping("sha512")
+    public @ResponseBody String sha512(HttpServletRequest request) {
+
+        String uid = request.getParameter("uid");
+        String timestamp = request.getParameter("timestamp");
+
+        String str = WebConst.WEB_ID + "_" + uid + "_" + timestamp + "_" + WebConst.SSO_KEY;
+        try {
+            return Commons.SHA(str, "SHA-512");
+        } catch (Exception e) {
+            throw new TipException("系统异常, SHA-512加密失败.");
+        }
+    }
 
     /**
      * 首页

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>闲聊么</title>
+    <script th:src="@{//cdn.bootcss.com/jquery/2.2.3/jquery.min.js}"></script>
+</head>
+<body>
+
+<script th:inline="javascript">
+    // thymeleaf 不能输入地址符,但是闲聊么api又不能识别转移后了的&amp;,所以用CDATA包起来.
+    /*<![CDATA[*/
+    var ds = ['identicon', 'monsterid', 'wavatar', 'retro', 'robohash'];
+
+    // 初始化闲聊么需要的数据
+    function init() {
+        var web_id = '11663';
+        var xlm_uid;
+        var xlm_name;
+        var xlm_avatar;
+
+        if (easyLocalStorage('xlm_uid') != null) {
+            xlm_uid = easyLocalStorage('xlm_uid');
+            xlm_name = easyLocalStorage('xlm_name');
+            xlm_avatar = easyLocalStorage('xlm_avatar');
+        }else {
+            xlm_uid = decodeURI(Math.seededRandom(Date.parse(new Date()), 1));
+            var name = prompt('请输入用户名').trim();
+            xlm_name = decodeURI(name === '' ? '匿名' : name);
+            xlm_avatar = decodeURI(avatarRandom(xlm_uid));
+            easyLocalStorage('xlm_uid', xlm_uid);
+            easyLocalStorage('xlm_name', xlm_name);
+            easyLocalStorage('xlm_avatar', xlm_avatar);
+        }
+
+        var timestamp = Date.parse(new Date());
+        var token = getToken(xlm_uid, timestamp);
+
+        window.location.href =  "https://www.xianliao.me/s/" + web_id + "" +
+            "?mobile=1" +
+            "&uid=" + xlm_uid + "" +
+            "&username=" + xlm_name + "" +
+            "&avatar=" + xlm_avatar + "" +
+            "&ts=" + timestamp + "" +
+            "&token=" + token;
+    }
+
+    $(function () {
+        init()
+    })
+
+    // 从后台获取到与闲聊么通信的token
+    function getToken(xlm_uid, timestamp) {
+        var result = null;
+        $.ajax({
+            url: [[@{/sha512}]],
+            type: 'GET',
+            dataType: 'text',
+            contentType: 'application/json',
+            data: {'uid': xlm_uid, 'timestamp': timestamp},
+            async: false,
+            success: function(data){
+                result = data;
+            }
+        });
+        return result;
+    }
+
+    // 通过gravatar.com.随机获取一个有趣的用户头像
+    function avatarRandom(xlm_uid) {
+        var num = Math.floor(Math.random() * 4 + 1);
+        return 'http://www.gravatar.com/avatar/' + xlm_uid + '?d=' + ds[num];
+    }
+
+    // 对本地存储的建议封装
+    function easyLocalStorage(key, value) {
+        if (value == null || value.trim() === '') {
+            return localStorage.getItem(key);
+        }else {
+            localStorage.setItem(key, value);
+        }
+        return true;
+    }
+
+    // 获取一个随机数
+    Math.seed = 5;
+    Math.seededRandom = function(max, min) {
+        max = max || 1;
+        min = min || 0;
+        Math.seed = (Math.seed * 9301 + 49297) % 233280;
+        var rnd = Math.seed / 233280.0;
+        return Math.ceil( min + rnd * (max - min) );   // Math.ceil实现取整功能，可以根据需要取消取整
+    };
+    /*]]>*/
+</script>
+</body>
+</html>
