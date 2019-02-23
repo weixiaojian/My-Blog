@@ -9,7 +9,7 @@
 <script th:inline="javascript">
     // thymeleaf 不能输入地址符,但是闲聊么api又不能识别转移后了的&amp;,所以用CDATA包起来.
     /*<![CDATA[*/
-    var ds = ['identicon', 'monsterid', 'wavatar', 'retro', 'robohash'];
+    var styleArray = ['identicon', 'monsterid', 'wavatar', 'retro', 'robohash'];
 
     // 初始化闲聊么需要的数据
     function init() {
@@ -46,13 +46,13 @@
 
     $(function () {
         init()
-    })
+    });
 
     // 从后台获取到与闲聊么通信的token
     function getToken(xlm_uid, timestamp) {
         var result = null;
         $.ajax({
-            url: [[@{/sha512}]],
+            url: [[@{/createXianLiaoToken}]],
             type: 'GET',
             dataType: 'text',
             contentType: 'application/json',
@@ -68,7 +68,7 @@
     // 通过gravatar.com.随机获取一个有趣的用户头像
     function avatarRandom(xlm_uid) {
         var num = Math.floor(Math.random() * 4 + 1);
-        return 'http://www.gravatar.com/avatar/' + xlm_uid + '?d=' + ds[num];
+        return 'http://www.gravatar.com/avatar/' + xlm_uid + '?d=' + styleArray[num];
     }
 
     // 对本地存储的建议封装

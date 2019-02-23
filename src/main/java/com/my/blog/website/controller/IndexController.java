@@ -67,8 +67,8 @@ public class IndexController extends BaseController {
     /**
      * 用于生成闲聊么 所需要的token信息
      */
-    @GetMapping("sha512")
-    public @ResponseBody String sha512(HttpServletRequest request) {
+    @GetMapping("createXianLiaoToken")
+    public @ResponseBody String createXianLiaoToken(HttpServletRequest request) {
 
         String uid = request.getParameter("uid");
         String timestamp = request.getParameter("timestamp");
