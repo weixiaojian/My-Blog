@@ -82,7 +82,7 @@ public class ArticleController extends BaseController {
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
             return RestResponseBo.fail(result);
         }
-        return RestResponseBo.ok();
+        return RestResponseBo.ok(contents);
     }
 
     @PostMapping(value = "/modify")
@@ -95,7 +95,7 @@ public class ArticleController extends BaseController {
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
             return RestResponseBo.fail(result);
         }
-        return RestResponseBo.ok();
+        return RestResponseBo.ok(contents);
     }
 
     @RequestMapping(value = "/delete")
