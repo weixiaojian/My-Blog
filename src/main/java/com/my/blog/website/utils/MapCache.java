@@ -110,6 +110,17 @@ public class MapCache {
     }
 
     /**
+     * 设置一个list缓存
+     *
+     * @param key   缓存key
+     * @param field 缓存field
+     * @param value 缓存value
+     */
+    public void lset(String key, String field, Object value) {
+        this.hset(key, field, value, -1);
+    }
+
+    /**
      * 设置一个hash缓存并带过期时间
      *
      * @param key     缓存key

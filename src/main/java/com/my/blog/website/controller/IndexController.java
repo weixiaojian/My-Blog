@@ -32,6 +32,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.Writer;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -79,6 +81,14 @@ public class IndexController extends BaseController {
         } catch (Exception e) {
             throw new TipException("系统异常, SHA-512加密失败.");
         }
+    }
+
+    @GetMapping("robots.txt")
+    public void robotsTxt(HttpServletResponse response) throws IOException {
+        Writer writer = response.getWriter();
+        String lineSeparator = System.getProperty("line.separator", "\n");
+        writer.append("User-agent: *").append(lineSeparator);
+        writer.append("Disallow:").append("/admin/*").append(lineSeparator);
     }
 
     /**

@@ -1,12 +1,12 @@
 package com.my.blog.website.interceptor;
 
+import com.my.blog.website.constant.WebConst;
+import com.my.blog.website.dto.Types;
 import com.my.blog.website.model.Vo.OptionVo;
 import com.my.blog.website.model.Vo.UserVo;
 import com.my.blog.website.service.IOptionService;
 import com.my.blog.website.service.IUserService;
 import com.my.blog.website.utils.*;
-import com.my.blog.website.constant.WebConst;
-import com.my.blog.website.dto.Types;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -47,9 +47,6 @@ public class BaseInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
 
         LOGGE.info("UserAgent: {}", request.getHeader(USER_AGENT));
-        LOGGE.info("用户访问地址: {}, 来路地址: {}", uri, IPKit.getIpAddrByRequest(request));
-
-
         //请求拦截处理
         UserVo user = TaleUtils.getLoginUser(request);
         if (null == user) {

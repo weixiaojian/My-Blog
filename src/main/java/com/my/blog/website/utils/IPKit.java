@@ -1,5 +1,12 @@
 package com.my.blog.website.utils;
 
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpStatus;
+import cn.hutool.http.HttpUtil;
+import com.google.gson.Gson;
+import com.my.blog.website.pojo.dto.AddressDTO;
+import com.my.blog.website.pojo.dto.TaobaoIpResponse;
+import com.my.blog.website.pojo.entity.VisitStatistics;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +36,7 @@ public class IPKit {
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        System.out.println("新的来访者,IP: " + ip);
+        log.info("新的来访者,IP: {}", ip);
         return ip;
     }
 
@@ -64,5 +71,20 @@ public class IPKit {
         } else {
             return localip;
         }
+    }
+
+    public static AddressDTO getIpAddressInfo(String ip) {
+        String taobaoIpUrl = "http://ip.taobao.com/service/getIpInfo.php?ip=" + ip;
+
+        HttpResponse response = HttpUtil.createGet(taobaoIpUrl).timeout(3000).execute();
+        if (response.getStatus() == HttpStatus.HTTP_OK) {
+            String body = response.body();
+            Gson gson = new Gson();
+            TaobaoIpResponse taobaoIpResponse = gson.fromJson(body, TaobaoIpResponse.class);
+            if (taobaoIpResponse.getCode() == 0) {
+                return taobaoIpResponse.getData();
+            }
+        }
+        return null;
     }
 }
