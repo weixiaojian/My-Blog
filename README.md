@@ -4,7 +4,7 @@
 本仓库主要是对其一些BUG的修复、一些功能的私人订制。  
 
 # 本集预告
-欢迎到我的个人博客 **imwj** [imyzt.top](http://blog.imwj.club) 留言   
+欢迎到我的个人博客 **imwj** [imwj.club](http://blog.imwj.club) 留言   
 本项目内容全部开源.如果您需要,大可将其clone到你本地进行安装部署.经过前人的贡献,它已经是一个非常漂亮的个人博客模板.   
 当然, 也请您留下 [我](https://github.com/weixiaojian) 和原作者[biezhi](https://github.com/biezhi)、[13](https://github.com/ZHENFENG13/My-Blog)的信息。谢谢
 
