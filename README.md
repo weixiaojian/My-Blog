@@ -4,9 +4,9 @@
 本仓库主要是对其一些BUG的修复、一些功能的私人订制。  
 
 # 本集预告
-欢迎到我的个人博客 **imyzt** [imyzt.top](http://blog.imyzt.top) 留言   
+欢迎到我的个人博客 **imwj** [imyzt.top](http://blog.imwj.club) 留言   
 本项目内容全部开源.如果您需要,大可将其clone到你本地进行安装部署.经过前人的贡献,它已经是一个非常漂亮的个人博客模板.   
-当然, 也请您留下 [我](https://github.com/imyzt) 和原作者[biezhi](https://github.com/biezhi)、[13](https://github.com/ZHENFENG13/My-Blog)的信息。谢谢
+当然, 也请您留下 [我](https://github.com/weixiaojian) 和原作者[biezhi](https://github.com/biezhi)、[13](https://github.com/ZHENFENG13/My-Blog)的信息。谢谢
 
 # 改造内容
 这部分可以从我的commit中查看具体操作内容.
@@ -29,8 +29,4 @@
 
 
 后续内容将持续更新.直至对本博客满意为止.
-
-
-
-我的幕布邀请: [https://mubu.com/inv/1785000](https://mubu.com/inv/1785000)    
     
